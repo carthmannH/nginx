@@ -57,6 +57,21 @@ pipeline:
                     skipDryRun: false
                     pruningEnabled: false
                   timeout: 10m
+              - step:
+                  type: K8sRollingRollback
+                  name: K8sRollingRollback_1
+                  identifier: K8sRollingRollback_1
+                  spec:
+                    pruningEnabled: false
+                    delegateSelectors:
+                      - helm-delegate
+                  timeout: 10m
+                  failureStrategies:
+                    - onFailure:
+                        errors:
+                          - Connectivity
+                        action:
+                          type: StageRollback
             rollbackSteps: []
         tags: {}
         failureStrategies:
