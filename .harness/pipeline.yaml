@@ -88,5 +88,5 @@ pipeline:
                 - AllErrors
               action:
                 type: StageRollback
-  identifier: Deploy_Sample_Pipeline_1688064278404_Clone
-  name: Deploy_Sample_Pipeline - Clone
+  identifier: pipeline.yaml
+  name: pipeline.yaml
