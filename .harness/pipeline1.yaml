@@ -1,0 +1,94 @@
+---
+pipeline:
+  projectIdentifier: "ChrisaCDBlockDemo"
+  orgIdentifier: "default"
+  tags: {}
+  stages:
+  - stage:
+      name: "Stage"
+      identifier: "Stage"
+      description: ""
+      type: "Deployment"
+      spec:
+        deploymentType: "Kubernetes"
+        service:
+          serviceRef: "Nginx"
+          serviceInputs:
+            serviceDefinition:
+              type: "Kubernetes"
+              spec:
+                artifacts:
+                  primary:
+                    primaryArtifactRef: "<+input>"
+                    sources: "<+input>"
+        environment:
+          environmentRef: "dev_1688064230161"
+          deployToAll: false
+          infrastructureDefinitions:
+          - identifier: "devcluster_1688064230161"
+        execution:
+          steps:
+          - step:
+              type: "ShellScript"
+              name: "Echo Welcome Message"
+              identifier: "shell_ID"
+              spec:
+                shell: "Bash"
+                onDelegate: true
+                source:
+                  type: "Inline"
+                  spec:
+                    script: "echo \"Welcome to Harness CD\" "
+                environmentVariables: []
+                outputVariables: []
+                executionTarget: {}
+          - step:
+              type: "HarnessApproval"
+              name: "HarnessApproval_1"
+              identifier: "HarnessApproval_1"
+              spec:
+                approvalMessage: "Please review the following information and approve\
+                  \ the pipeline progression"
+                includePipelineExecutionHistory: true
+                isAutoRejectEnabled: false
+                approvers:
+                  userGroups:
+                  - "CA"
+                  minimumCount: 1
+                  disallowPipelineExecutor: false
+                approverInputs: []
+              timeout: "1d"
+            isContainerStepGroup: false
+          - step:
+              type: "K8sRollingDeploy"
+              name: "Rolling Deployment"
+              identifier: "Rolling_Deployment"
+              spec:
+                skipDryRun: false
+                pruningEnabled: false
+              timeout: "10m"
+          - step:
+              type: "K8sRollingRollback"
+              name: "K8sRollingRollback_1"
+              identifier: "K8sRollingRollback_1"
+              spec:
+                pruningEnabled: false
+                delegateSelectors:
+                - "helm-delegate"
+              timeout: "10m"
+              failureStrategies:
+              - onFailure:
+                  errors:
+                  - "Connectivity"
+                  action:
+                    type: "StageRollback"
+          rollbackSteps: []
+      tags: {}
+      failureStrategies:
+      - onFailure:
+          errors:
+          - "AllErrors"
+          action:
+            type: "StageRollback"
+  identifier: "Deploy_Sample_Pipeline_1688064278404_Clone_Clone"
+  name: "Deploy_Sample_Pipeline - Clone - Clone"
