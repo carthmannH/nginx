@@ -12,7 +12,7 @@ pipeline:
       spec:
         deploymentType: "Kubernetes"
         service:
-          serviceRef: "sample_service_1688064254089"
+          serviceRef: "Nginx"
         environment:
           environmentRef: "dev_1688064230161"
           deployToAll: false
@@ -50,5 +50,5 @@ pipeline:
           - "AllErrors"
           action:
             type: "StageRollback"
-  identifier: "Deploy_Sample_Pipeline_1688064278404_Clone"
-  name: "Deploy_Sample_Pipeline - Clone"
+  identifier: "Deploy_Sample_Pipeline - Clone"
+  name: "Deploy_Sample_Pipeline_1688064278404_Clone"
